@@ -1,7 +1,19 @@
-Hyperledger Fabric Development Environment
+# Hyperledger Fabric Development Environment
 
-Put your chaincode into the chaincode directory
+## Folder Structure
+```
+./
+├── chaincode
+│   └── sacc
+│       └── sacc.go
+│── devmode
+│   ...
+│
+│   └── INSTALL.md
+└── README.md
+```
 
-The devmode directory has the necessary scripts, files and instructions
-to set up a development network using docker compose for developing
+## Description
+- `chaincode/` Put your chaincode here
+- `devmode/` contains the necessary scripts, files and instructions to set up a development network using docker compose for developing
 your chaincode
