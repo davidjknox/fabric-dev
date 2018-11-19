@@ -3,10 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
-
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
+	"strconv"
 )
 
 type SimpleChaincode struct {
@@ -72,6 +71,15 @@ func (fms *SimpleChaincode) AddCdr(stub shim.ChaincodeStubInterface, args []stri
 		return shim.Error("Unable to get CDRs")
 	}
 
+	// Check for value greater than £50 and alert if true
+	var threshold = 50.0
+	var val float64
+
+	val, _ = strconv.ParseFloat(args[4], 64)
+	if (val) > threshold {
+		fmt.Println("ALERT: Value exceeds threshold!")
+	}
+
 	var cdr CDR
 
 	// Build JSON values
@@ -86,21 +94,13 @@ func (fms *SimpleChaincode) AddCdr(stub shim.ChaincodeStubInterface, args []stri
 	content := "{" + timestamp + calling + called + duration + value + "}"
 	err = json.Unmarshal([]byte( content ), &cdr)
 	fmt.Printf("Query response content: %s\n", content)
+
 	var cdrs []CDR
 
 	// Decode JSON into CDR array
 	// Append the new CDR
 	err = json.Unmarshal(bytes, &cdrs)
 	cdrs = append(cdrs, cdr)
-
-	var threshold = 50.0
-
-	// Check for value greater than £50 and alert if true
-	if val, err := strconv.ParseFloat(args[3], 64); err == nil {
-		if (val) > threshold {
-			fmt.Println("ALERT: Value exceeds threshold!")
-		}
-	}
 
 	// Encode as JSON
 	// Put back on the block
