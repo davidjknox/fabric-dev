@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -92,7 +93,14 @@ func (fms *SimpleChaincode) AddCdr(stub shim.ChaincodeStubInterface, args []stri
 	err = json.Unmarshal(bytes, &cdrs)
 	cdrs = append(cdrs, cdr)
 
-	// TODO: Check for value greater than £50 and alert if true
+	var threshold = 50.0
+
+	// Check for value greater than £50 and alert if true
+	if val, err := strconv.ParseFloat(args[3], 64); err == nil {
+		if (val) > threshold {
+			fmt.Println("ALERT: Value exceeds threshold!")
+		}
+	}
 
 	// Encode as JSON
 	// Put back on the block
