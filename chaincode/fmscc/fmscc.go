@@ -92,6 +92,8 @@ func (fms *SimpleChaincode) AddCdr(stub shim.ChaincodeStubInterface, args []stri
 	err = json.Unmarshal(bytes, &cdrs)
 	cdrs = append(cdrs, cdr)
 
+	// TODO: Check for value greater than £50 and alert if true
+
 	// Encode as JSON
 	// Put back on the block
 	bytes, err = json.Marshal(cdrs)
